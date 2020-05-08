@@ -1,0 +1,15 @@
+# post 注册jwt
+POST /auth HTTP/1.1
+Host: 127.0.0.1:8080
+Content-Type: Content-Type: application/jsond
+
+{
+"user":"dyb",
+"passwd":"123456"
+}
+
+### 一个get请求
+GET /home HTTP/1.1
+Host: 127.0.0.1:8080
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJuYW1lIiwiZXhwIjoxNTg4OTQ4Mzk0LCJpc3MiOiJteS1wcm9qZWN0In0.Yfd1b7zAkUm8LVaU7-USsY8OHrrTBGeA2Ol0q2CLdTA
+
