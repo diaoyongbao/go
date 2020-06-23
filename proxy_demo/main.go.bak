@@ -1,0 +1,62 @@
+package main
+
+import (
+	"fmt"
+	"math/rand"
+	"net/http"
+	"net/url"
+	// "io/ioutil"
+	"github.com/gocolly/colly"
+	"github.com/gocolly/colly/proxy"
+)
+
+var proxies []*url.URL = []*url.URL{
+	&url.URL{Host: "180.149.144.176:80"},
+	&url.URL{Host: "222.74.202.226:9999"},
+}
+
+func randomProxySwitcher(_ *http.Request) (*url.URL, error) {
+	return proxies[rand.Intn(len(proxies))], nil
+}
+
+func main(){
+	c := colly.NewCollector()
+
+	rp, err := proxy.RoundRobinProxySwitcher("http://183.232.232.69:80", "http://61.135.185.111:80")
+	if err != nil {
+		panic(err.Error())
+	}
+	c.SetProxyFunc(rp) 
+
+	c.OnRequest(func(r *colly.Request){
+		fmt.Println("vi",r.URL)
+	
+	})
+
+	c.OnError(func(_ *colly.Response, err error) {
+		fmt.Println("Something went wrong:", err)
+	})
+
+	c.OnResponse(func(r *colly.Response) {
+		fmt.Println("Visited")
+		// b ,err := ioutil.ReadAll(r.Body)
+		// if err != nil{
+		// 	panic(err.Error())
+		// }
+		// fmt.Println(string(b))
+	})
+
+	c.OnHTML("p", func(e *colly.HTMLElement) {
+		// e.Request.Visit(e.Attr("text"))
+		// fmt.Println("111")
+		fmt.Println(e.Text)
+	})
+	// c.OnHTML(func(r *colly.Response) {
+	// 	fmt.Println("Finished", r.Request.URL)
+	
+	// })
+
+	// c.SetProxyFunc(randomProxySwitcher)
+	c.Visit("https://2020.ip138.com/")
+	// fmt.Println()
+}
